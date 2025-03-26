@@ -109,7 +109,7 @@ args = register_arguments()
 # All of the output messages sent to the console.
 messages = {
     "tea_time_header_title": "[bold]TEA TIME",
-    "tea_time_header_subtitle": '[italic]Lovingly crafted by Ashen[/italic] :hot_beverage-emoji:',
+    "tea_time_header_subtitle": '[italic]Lovingly crafted by Marina[/italic] :hot_beverage-emoji:',
     "tea_time_header_primary": "[italic]It\'s time to brew some tea![/italic]\n",
     "tea_time_header_secondary": "[italic]Get your kettle boiling and press[/italic] [gold1]Enter[white] [italic]to continue the process![/italic]",
     "invalid_kettle_format": '[red]Invalid time specified! Use "-k 1m" format',
@@ -207,10 +207,10 @@ if __name__ == "__main__":
     main()
 
 """
-@Author = "Ashen"
+@Author = "Marina (OfSeaAndStars)"
 @Licence = "MIT"
-@Version = "1.0.0"
-@Email = "ashen@ashcorp.dev"
+@Version = "2.0.0"
+@Email = "oftheseaandstars@proton.me"
 @Status = "Production"
 """
 
