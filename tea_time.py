@@ -11,7 +11,7 @@ import os
 import sys
 import time
 from rich import print as rprint, pretty as auto_pretty
-from rich.progress import Progress
+from rich.progress import Progress, SpinnerColumn
 from rich.prompt import Confirm, Prompt
 from rich.panel import Panel
 from rich.pretty import Pretty
@@ -53,7 +53,7 @@ def set_timer(seconds, arg):
     elapsed_time = 0
 
     if arg == "kettle":
-        with Progress(transient=True) as kettle_progress:
+        with Progress(SpinnerColumn(spinner_name='clock'), *Progress.get_default_columns(), transient=True) as kettle_progress:
             kettle_timer = kettle_progress.add_task(
                 messages['kettle_task_description'], total=seconds)
 
@@ -67,7 +67,7 @@ def set_timer(seconds, arg):
 
     if arg == "brew":
         print('')
-        with Progress(transient=True) as brew_progress:
+        with Progress(SpinnerColumn(spinner_name='clock'), *Progress.get_default_columns(), transient=True) as brew_progress:
             brew_timer = brew_progress.add_task(
                 messages['tea_task_description'], total=seconds)
 
@@ -88,7 +88,8 @@ def display_tea_time_header():
     ''' Prints a display header for the script. '''
     clear_terminal()
     string = (
-        messages['tea_time_header_primary'] + messages['tea_time_header_secondary']
+        messages['tea_time_header_primary'] +
+        messages['tea_time_header_secondary']
     )
     rprint(Panel.fit(string, title=messages['tea_time_header_title'],
                      subtitle=messages['tea_time_header_subtitle'], padding=(1, 1)))
@@ -109,7 +110,7 @@ args = register_arguments()
 # All of the output messages sent to the console.
 messages = {
     "tea_time_header_title": "[bold]TEA TIME",
-    "tea_time_header_subtitle": '[italic]Lovingly crafted by Ashen[/italic] :hot_beverage-emoji:',
+    "tea_time_header_subtitle": '[italic]Lovingly crafted by [dark_turquoise]Marina[white][/italic] :hot_beverage-emoji:',
     "tea_time_header_primary": "[italic]It\'s time to brew some tea![/italic]\n",
     "tea_time_header_secondary": "[italic]Get your kettle boiling and press[/italic] [gold1]Enter[white] [italic]to continue the process![/italic]",
     "invalid_kettle_format": '[red]Invalid time specified! Use "-k 1m" format',
@@ -117,7 +118,7 @@ messages = {
     "kettle_boiled": '[green blink]Kettle has now boiled (hopefully)!\n',
     "kettle_task_description": "[blink]Kettle boiling...",
     "tea_brew_confirmation": '[bold]Are you ready to brew?',
-    "tea_brewed": '\n[bold italic]Your tea has brewed![/bold italic] :hot_beverage-emoji:\nPress [gold1]Enter[/gold1] once more and then enjoy your beverage!',
+    "tea_brewed": '\r[bold italic]Your tea has brewed![/bold italic] :hot_beverage-emoji:\nPress [gold1]Enter[/gold1] once more and then enjoy your beverage!',
     "tea_brewing_cancelled": 'Tea brewing cancelled. Press [gold1]Enter[/gold1] to close the program.',
     "tea_task_description": "[blink]Tea brewing...",
     "no_kettle_timer_prompt": '\nHow long would you like to set your kettle timer for? [bold cyan](3m)[/bold cyan]',
@@ -134,13 +135,16 @@ def main():
     display_tea_time_header()
 
     if args.kettle is None and args.brew is None:
-        rprint('\n[italic]No timers were provided...\n\nPress [gold1]Enter[/gold1] to set timers:')
+        rprint(Panel.fit(
+            '\n[italic]It looks like you didn\'t provide any timers!\n\nPress [gold1]Enter[/gold1] to set timers your timers manually.'))
         input()
         # We don't want to show the default here so we can use our own formatting for the messages.
         display_tea_time_header()
-        args.kettle = Prompt.ask(messages['no_kettle_timer_prompt'], default="3m", show_default=False)
+        args.kettle = Prompt.ask(
+            messages['no_kettle_timer_prompt'], default="3m", show_default=False)
         display_tea_time_header()
-        args.brew = Prompt.ask(messages['no_brew_timer_prompt'], default=None, show_default=False)
+        args.brew = Prompt.ask(
+            messages['no_brew_timer_prompt'], default=None, show_default=False)
         display_tea_time_header()
         generated_timers = True
     else:
@@ -156,7 +160,7 @@ def main():
         except ValueError:
             rprint(messages['invalid_kettle_format'])
             sys.exit()
-        
+
         rprint(f'[bold]Kettle Timer:[/bold] {args.kettle}')
         rprint(f'[bold]Brew Timer:[/bold] {args.brew}\n')
         set_timer(seconds, 'kettle')
@@ -175,13 +179,15 @@ def main():
                     rprint(messages['invalid_brew_format'])
                     sys.exit()
                 set_timer(seconds, 'brew')
-                rprint('\r')
-                rprint(messages['tea_brewed'])
+                display_tea_time_header()
+                rprint('')
+                rprint(Panel.fit(messages['tea_brewed']))
                 playsound(ring_sound_path)
                 input()
                 clear_terminal()
             else:
-                rprint(messages['tea_brewing_cancelled'])
+                display_tea_time_header()
+                rprint(Panel.fit(messages['tea_brewing_cancelled']))
                 input()
                 clear_terminal()
 
@@ -197,7 +203,7 @@ def main():
             sys.exit()
         set_timer(seconds, 'brew')
         rprint('\r')
-        rprint(messages['tea_brewed'])
+        rprint(Panel.fit(messages['tea_brewed']))
         playsound(ring_sound_path)
         input()
         clear_terminal()
@@ -207,10 +213,10 @@ if __name__ == "__main__":
     main()
 
 """
-@Author = "Ashen"
+@Author = "Marina (OfSeaAndStars)"
 @Licence = "MIT"
-@Version = "1.0.0"
-@Email = "ashen@ashcorp.dev"
+@Version = "2.0.0"
+@Email = "oftheseaandstars@proton.me"
 @Status = "Production"
 """
 
