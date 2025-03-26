@@ -17,10 +17,10 @@ Clone the repository, (optionally) set up a Python virtual environment, and run 
 If you are using a virtual environment, activate it using one of the following options, based on your operating system:
 
 ```bash
-  Scripts/Activate.ps1 # Windows PowerShell
-  Scripts/Activate.bat # Windows CMD
-  bin/Activate.ps1 # pwsh
-  source /bin/activate # bash/zsh
+  <venv>/Scripts/Activate.ps1 # Windows PowerShell
+  <venv>/Scripts/Activate.bat # Windows CMD
+  <venv>/bin/Activate.ps1 # pwsh
+  source <venv>/bin/activate # bash/zsh
 ```
 
 Then simply run the command - if you do not specify the arguments, you'll be prompted to set them within the application.
