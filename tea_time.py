@@ -11,7 +11,7 @@ import os
 import sys
 import time
 from rich import print as rprint, pretty as auto_pretty
-from rich.progress import Progress
+from rich.progress import Progress, SpinnerColumn
 from rich.prompt import Confirm, Prompt
 from rich.panel import Panel
 from rich.pretty import Pretty
@@ -53,7 +53,7 @@ def set_timer(seconds, arg):
     elapsed_time = 0
 
     if arg == "kettle":
-        with Progress(transient=True) as kettle_progress:
+        with Progress(SpinnerColumn(spinner_name='clock'), *Progress.get_default_columns(), transient=True) as kettle_progress:
             kettle_timer = kettle_progress.add_task(
                 messages['kettle_task_description'], total=seconds)
 
@@ -67,7 +67,7 @@ def set_timer(seconds, arg):
 
     if arg == "brew":
         print('')
-        with Progress(transient=True) as brew_progress:
+        with Progress(SpinnerColumn(spinner_name='clock'), *Progress.get_default_columns(), transient=True) as brew_progress:
             brew_timer = brew_progress.add_task(
                 messages['tea_task_description'], total=seconds)
 
@@ -88,7 +88,8 @@ def display_tea_time_header():
     ''' Prints a display header for the script. '''
     clear_terminal()
     string = (
-        messages['tea_time_header_primary'] + messages['tea_time_header_secondary']
+        messages['tea_time_header_primary'] +
+        messages['tea_time_header_secondary']
     )
     rprint(Panel.fit(string, title=messages['tea_time_header_title'],
                      subtitle=messages['tea_time_header_subtitle'], padding=(1, 1)))
@@ -134,13 +135,16 @@ def main():
     display_tea_time_header()
 
     if args.kettle is None and args.brew is None:
-        rprint('\n[italic]No timers were provided...\n\nPress [gold1]Enter[/gold1] to set timers:')
+        rprint(
+            '\n[italic]No timers were provided...\n\nPress [gold1]Enter[/gold1] to set timers:')
         input()
         # We don't want to show the default here so we can use our own formatting for the messages.
         display_tea_time_header()
-        args.kettle = Prompt.ask(messages['no_kettle_timer_prompt'], default="3m", show_default=False)
+        args.kettle = Prompt.ask(
+            messages['no_kettle_timer_prompt'], default="3m", show_default=False)
         display_tea_time_header()
-        args.brew = Prompt.ask(messages['no_brew_timer_prompt'], default=None, show_default=False)
+        args.brew = Prompt.ask(
+            messages['no_brew_timer_prompt'], default=None, show_default=False)
         display_tea_time_header()
         generated_timers = True
     else:
@@ -156,7 +160,7 @@ def main():
         except ValueError:
             rprint(messages['invalid_kettle_format'])
             sys.exit()
-        
+
         rprint(f'[bold]Kettle Timer:[/bold] {args.kettle}')
         rprint(f'[bold]Brew Timer:[/bold] {args.brew}\n')
         set_timer(seconds, 'kettle')
