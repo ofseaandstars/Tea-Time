@@ -110,7 +110,7 @@ args = register_arguments()
 # All of the output messages sent to the console.
 messages = {
     "tea_time_header_title": "[bold]TEA TIME",
-    "tea_time_header_subtitle": '[italic]Lovingly crafted by Marina[/italic] :hot_beverage-emoji:',
+    "tea_time_header_subtitle": '[italic]Lovingly crafted by [dark_turquoise]Marina[white][/italic] :hot_beverage-emoji:',
     "tea_time_header_primary": "[italic]It\'s time to brew some tea![/italic]\n",
     "tea_time_header_secondary": "[italic]Get your kettle boiling and press[/italic] [gold1]Enter[white] [italic]to continue the process![/italic]",
     "invalid_kettle_format": '[red]Invalid time specified! Use "-k 1m" format',
@@ -118,7 +118,7 @@ messages = {
     "kettle_boiled": '[green blink]Kettle has now boiled (hopefully)!\n',
     "kettle_task_description": "[blink]Kettle boiling...",
     "tea_brew_confirmation": '[bold]Are you ready to brew?',
-    "tea_brewed": '\n[bold italic]Your tea has brewed![/bold italic] :hot_beverage-emoji:\nPress [gold1]Enter[/gold1] once more and then enjoy your beverage!',
+    "tea_brewed": '\r[bold italic]Your tea has brewed![/bold italic] :hot_beverage-emoji:\nPress [gold1]Enter[/gold1] once more and then enjoy your beverage!',
     "tea_brewing_cancelled": 'Tea brewing cancelled. Press [gold1]Enter[/gold1] to close the program.',
     "tea_task_description": "[blink]Tea brewing...",
     "no_kettle_timer_prompt": '\nHow long would you like to set your kettle timer for? [bold cyan](3m)[/bold cyan]',
@@ -136,7 +136,7 @@ def main():
 
     if args.kettle is None and args.brew is None:
         rprint(
-            '\n[italic]No timers were provided...\n\nPress [gold1]Enter[/gold1] to set timers:')
+            '\n[italic]It looks like you didn\'t provide any timers!\n\nPress [gold1]Enter[/gold1] to set timers your timers manually.')
         input()
         # We don't want to show the default here so we can use our own formatting for the messages.
         display_tea_time_header()
@@ -179,7 +179,8 @@ def main():
                     rprint(messages['invalid_brew_format'])
                     sys.exit()
                 set_timer(seconds, 'brew')
-                rprint('\r')
+                display_tea_time_header()
+                rprint('')
                 rprint(messages['tea_brewed'])
                 playsound(ring_sound_path)
                 input()
