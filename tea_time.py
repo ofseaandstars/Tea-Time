@@ -135,8 +135,8 @@ def main():
     display_tea_time_header()
 
     if args.kettle is None and args.brew is None:
-        rprint(
-            '\n[italic]It looks like you didn\'t provide any timers!\n\nPress [gold1]Enter[/gold1] to set timers your timers manually.')
+        rprint(Panel.fit(
+            '\n[italic]It looks like you didn\'t provide any timers!\n\nPress [gold1]Enter[/gold1] to set timers your timers manually.'))
         input()
         # We don't want to show the default here so we can use our own formatting for the messages.
         display_tea_time_header()
@@ -181,12 +181,13 @@ def main():
                 set_timer(seconds, 'brew')
                 display_tea_time_header()
                 rprint('')
-                rprint(messages['tea_brewed'])
+                rprint(Panel.fit(messages['tea_brewed']))
                 playsound(ring_sound_path)
                 input()
                 clear_terminal()
             else:
-                rprint(messages['tea_brewing_cancelled'])
+                display_tea_time_header()
+                rprint(Panel.fit(messages['tea_brewing_cancelled']))
                 input()
                 clear_terminal()
 
@@ -202,7 +203,7 @@ def main():
             sys.exit()
         set_timer(seconds, 'brew')
         rprint('\r')
-        rprint(messages['tea_brewed'])
+        rprint(Panel.fit(messages['tea_brewed']))
         playsound(ring_sound_path)
         input()
         clear_terminal()
